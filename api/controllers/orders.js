@@ -35,6 +35,7 @@ exports.orders_create_order = (req, res, next) => {
     .then((product) => {
       const order = new Order({
         _id: mongoose.Types.ObjectId(),
+        user: mongoose.Types.ObjectId(req.userData.userId),
         quantity: req.body.quantity,
         product: req.body.productId,
       });
@@ -67,7 +68,7 @@ exports.orders_create_order = (req, res, next) => {
 
 exports.orders_get_order = (req, res, next) => {
   Order.findById(req.params.orderId)
-    .populate("product")
+    .populate("product", "user")
     .exec()
     .then((order) => {
       if (!order) {
